@@ -69,19 +69,399 @@
         -webkit-backdrop-filter: blur(8px);
       }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.561.0"
-  }
-}
-</script>
-</head>
+    
+    <!-- Import Map for React and Lucide -->
+    <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@18.2.0",
+        "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+        "lucide-react": "https://esm.sh/lucide-react@0.263.1"
+      }
+    }
+    </script>
+    <!-- Babel for in-browser JSX compilation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
+    <script type="text/babel" data-type="module">
+      import React, { useState, useEffect } from 'react';
+      import { createRoot } from 'react-dom/client';
+      import { 
+        Menu, 
+        X, 
+        Mail, 
+        Phone, 
+        MapPin, 
+        Linkedin, 
+        Github, 
+        Download, 
+        ExternalLink,
+        ChevronRight,
+        Code,
+        Smartphone,
+        Database,
+        Terminal,
+        Bug,
+        CheckCircle2
+      } from 'lucide-react';
+
+      // Resume Data
+      const RESUME_DATA = {
+        header: {
+          name: "Mohitkumar Vora",
+          title: "Software Quality Assurance Engineer",
+          contact: {
+            email: "mohitv88@gmail.com",
+            phone: "+91 7621024551",
+            location: "Ahmedabad, India"
+          }
+        },
+        summary: "Detail-oriented and proactive Software Quality Assurance Engineer with 6+ years of experience in manual and automation testing across web and mobile applications. Skilled in functional, regression, integration, and UI testing using Selenium, JMeter, and Postman. Strong understanding of SDLC, STLC, and Agile methodologies, with a track record of designing effective test cases, analyzing defects, and collaborating with cross-functional teams to ensure product quality and timely delivery.",
+        experience: [
+          {
+            role: "Sr. QA Tester",
+            company: "TechCompose Solutions Pvt. Ltd.",
+            period: "Oct 2020 - Present",
+            description: [
+              "Analyze customer requirements and create test scenarios and cases.",
+              "Perform unit, integration, regression, UI, and UAT testing for multiple web applications.",
+              "Identify and document software defects using JIRA and verify fixes.",
+              "Test web applications such as Build Effective and AR Workflow.",
+              "Self-learned and implemented automation scripts in Selenium."
+            ]
+          },
+          {
+            role: "QC Engineer",
+            company: "Vagaro Technologies Pvt. Ltd.",
+            period: "Apr 2019 – May 2020",
+            description: [
+              "Designed and executed test plans based on BRD and user stories.",
+              "Reported, tracked, and validated defects to ensure smooth release cycles.",
+              "Tested iOS and Android mobile applications.",
+              "Participated in Agile ceremonies ensuring test coverage and sprint deliverables."
+            ]
+          },
+          {
+            role: "QA & Support Analyst",
+            company: "TabsBi India Software Pvt. Ltd.",
+            period: "Jul 2017 – Mar 2019",
+            description: [
+              "Created and managed support tickets; assisted in QA for custom applications.",
+              "Performed software testing, upgrades, and IIS configurations.",
+              "Validated bug fixes and maintained quality assurance documentation."
+            ]
+          }
+        ],
+        skills: {
+          core: ["Manual Testing", "Web & Mobile App Testing", "Regression & UAT", "UI Testing", "Cross-Browser Testing", "SDLC & STLC", "Agile Methodologies"],
+          technical: ["Selenium & Playwright", "API Testing (Postman)", "Python", "Basic SQL", "HTML", "CSS"],
+          tools: ["JIRA", "Bug Tracking Systems", "Test Case Design"]
+        },
+        education: [
+          {
+            degree: "Bachelor of Computer Application (BCA)",
+            institution: "Karnataka State University, Mysore",
+            grade: "First Class"
+          },
+          {
+            degree: "Advanced Diploma in Information Technology (ADIT)",
+            institution: "LCC, Vadodara",
+            grade: "Distinction"
+          },
+          {
+            degree: "Python Automation (Selenium with Python)",
+            institution: "The Testing Academy, Online",
+            grade: "2024"
+          }
+        ]
+      };
+
+      const Navigation = () => {
+        const [isOpen, setIsOpen] = useState(false);
+        const [scrolled, setScrolled] = useState(false);
+
+        useEffect(() => {
+          const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+          };
+          window.addEventListener('scroll', handleScroll);
+          return () => window.removeEventListener('scroll', handleScroll);
+        }, []);
+
+        const navLinks = [
+          { name: 'About', href: '#about' },
+          { name: 'Experience', href: '#experience' },
+          { name: 'Skills', href: '#skills' },
+          { name: 'Education', href: '#education' },
+          { name: 'Contact', href: '#contact' },
+        ];
+
+        return (
+          <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'glass-nav shadow-md py-3' : 'bg-transparent py-5'}`}>
+            <div className="container mx-auto px-6 flex justify-between items-center">
+              <a href="#" className="text-2xl font-bold text-cat-text">
+                Mohit<span className="text-cat-peach">.QA</span>
+              </a>
+
+              {/* Desktop Menu */}
+              <div className="hidden md:flex space-x-8">
+                {navLinks.map((link) => (
+                  <a 
+                    key={link.name} 
+                    href={link.href} 
+                    className="text-cat-subtext0 hover:text-cat-blue font-medium transition-colors"
+                  >
+                    {link.name}
+                  </a>
+                ))}
+              </div>
+
+              {/* Mobile Menu Button */}
+              <button 
+                className="md:hidden text-cat-text"
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                {isOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+
+              {/* Mobile Menu Overlay */}
+              {isOpen && (
+                <div className="absolute top-full left-0 w-full bg-cat-base border-t border-cat-surface0 shadow-lg md:hidden flex flex-col p-4 animate-in slide-in-from-top-2">
+                  {navLinks.map((link) => (
+                    <a 
+                      key={link.name} 
+                      href={link.href}
+                      className="py-3 px-4 text-cat-text hover:bg-cat-surface0 rounded-lg"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {link.name}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          </nav>
+        );
+      };
+
+      const Hero = () => {
+        return (
+          <section id="about" className="pt-32 pb-20 px-6 min-h-screen flex items-center bg-cat-base">
+            <div className="container mx-auto">
+              <div className="max-w-3xl">
+                <span className="text-cat-peach font-semibold text-lg tracking-wide mb-2 block">Hello, I'm</span>
+                <h1 className="text-5xl md:text-7xl font-bold text-cat-text mb-6">
+                  {RESUME_DATA.header.name}
+                </h1>
+                <h2 className="text-2xl md:text-3xl text-cat-subtext0 mb-8 font-light">
+                  {RESUME_DATA.header.title}
+                </h2>
+                
+                <p className="text-lg text-cat-subtext1 leading-relaxed mb-10 border-l-4 border-cat-rosewater pl-6">
+                  {RESUME_DATA.summary}
+                </p>
+
+                <div className="flex flex-wrap gap-4 mb-12">
+                  <a href="#contact" className="px-8 py-3 bg-cat-blue text-white rounded-full font-semibold hover:bg-cat-sapphire transition-colors shadow-lg shadow-cat-blue/20 flex items-center gap-2">
+                    <Mail size={18} />
+                    Contact Me
+                  </a>
+                  <a href="#experience" className="px-8 py-3 bg-cat-surface0 text-cat-text rounded-full font-semibold hover:bg-cat-surface1 transition-colors flex items-center gap-2">
+                    <ChevronRight size={18} />
+                    View Work
+                  </a>
+                </div>
+
+                <div className="flex flex-col md:flex-row gap-6 text-cat-subtext0 text-sm">
+                  <div className="flex items-center gap-2">
+                    <Mail size={16} className="text-cat-pink" />
+                    {RESUME_DATA.header.contact.email}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Phone size={16} className="text-cat-green" />
+                    {RESUME_DATA.header.contact.phone}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <MapPin size={16} className="text-cat-mauve" />
+                    {RESUME_DATA.header.contact.location}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const ExperienceCard = ({ role, company, period, description }) => (
+        <div className="group relative border-l-2 border-cat-surface0 pl-8 pb-12 last:pb-0">
+          <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-cat-surface1 group-hover:bg-cat-peach transition-colors border-2 border-cat-base"></div>
+          <div className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all border border-cat-surface0/50">
+            <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
+              <div>
+                <h3 className="text-xl font-bold text-cat-text">{role}</h3>
+                <p className="text-cat-blue font-medium">{company}</p>
+              </div>
+              <span className="text-sm font-medium text-cat-overlay1 px-3 py-1 bg-cat-base rounded-full mt-2 md:mt-0 w-fit">
+                {period}
+              </span>
+            </div>
+            <ul className="space-y-2">
+              {description.map((item, index) => (
+                <li key={index} className="flex items-start gap-2 text-cat-subtext0">
+                  <span className="mt-1.5 min-w-[6px] h-[6px] rounded-full bg-cat-rosewater block"></span>
+                  <span className="text-sm leading-relaxed">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      );
+
+      const Experience = () => {
+        return (
+          <section id="experience" className="py-20 px-6 bg-cat-mantle">
+            <div className="container mx-auto max-w-4xl">
+              <h2 className="text-3xl font-bold text-cat-text mb-12 flex items-center gap-3">
+                <Terminal className="text-cat-peach" />
+                Professional Experience
+              </h2>
+              <div className="ml-2">
+                {RESUME_DATA.experience.map((job, index) => (
+                  <ExperienceCard key={index} {...job} />
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const SkillGroup = ({ title, skills, icon: Icon, colorClass }) => (
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-cat-surface0/50 hover:-translate-y-1 transition-transform duration-300">
+          <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-4 ${colorClass} bg-opacity-10`}>
+            <Icon className={colorClass.replace('bg-', 'text-')} size={24} />
+          </div>
+          <h3 className="text-lg font-bold text-cat-text mb-4">{title}</h3>
+          <div className="flex flex-wrap gap-2">
+            {skills.map((skill) => (
+              <span 
+                key={skill} 
+                className="px-3 py-1 text-xs font-medium bg-cat-base text-cat-subtext0 rounded-md border border-cat-surface0 hover:border-cat-peach hover:text-cat-peach transition-colors cursor-default"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+      );
+
+      const Skills = () => {
+        return (
+          <section id="skills" className="py-20 px-6 bg-cat-base">
+            <div className="container mx-auto max-w-5xl">
+              <h2 className="text-3xl font-bold text-cat-text mb-12 flex items-center gap-3">
+                <CheckCircle2 className="text-cat-blue" />
+                Skills & Technologies
+              </h2>
+              <div className="grid md:grid-cols-3 gap-6">
+                <SkillGroup 
+                  title="Core QA" 
+                  skills={RESUME_DATA.skills.core} 
+                  icon={Bug} 
+                  colorClass="bg-cat-red text-cat-red"
+                />
+                <SkillGroup 
+                  title="Technical & Code" 
+                  skills={RESUME_DATA.skills.technical} 
+                  icon={Code} 
+                  colorClass="bg-cat-blue text-cat-blue"
+                />
+                <SkillGroup 
+                  title="Tools & Management" 
+                  skills={RESUME_DATA.skills.tools} 
+                  icon={Database} 
+                  colorClass="bg-cat-green text-cat-green"
+                />
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const Education = () => {
+        return (
+          <section id="education" className="py-20 px-6 bg-cat-mantle">
+            <div className="container mx-auto max-w-4xl">
+              <h2 className="text-3xl font-bold text-cat-text mb-12 text-center">Education & Certifications</h2>
+              <div className="grid md:grid-cols-3 gap-6">
+                {RESUME_DATA.education.map((edu, index) => (
+                  <div key={index} className="bg-white p-6 rounded-xl text-center shadow-sm hover:shadow-md transition-shadow">
+                    <div className="w-10 h-10 bg-cat-peach/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <span className="text-cat-peach font-bold text-sm">{edu.grade.includes("2024") ? "'24" : "Grad"}</span>
+                    </div>
+                    <h3 className="font-bold text-cat-text mb-2 text-sm">{edu.degree}</h3>
+                    <p className="text-cat-subtext0 text-sm mb-2">{edu.institution}</p>
+                    <span className="inline-block px-3 py-1 bg-cat-base rounded-full text-xs font-medium text-cat-blue">
+                      {edu.grade}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const Footer = () => {
+        return (
+          <footer id="contact" className="bg-white py-16 px-6 border-t border-cat-surface0">
+            <div className="container mx-auto max-w-4xl text-center">
+              <h2 className="text-3xl font-bold text-cat-text mb-6">Let's Connect</h2>
+              <p className="text-cat-subtext0 mb-8 max-w-lg mx-auto">
+                I'm currently available for new opportunities. Whether you have a question or just want to say hi, I'll try my best to get back to you!
+              </p>
+              
+              <div className="flex justify-center gap-6 mb-12">
+                <a href={`mailto:${RESUME_DATA.header.contact.email}`} className="flex items-center gap-2 px-6 py-3 bg-cat-text text-white rounded-lg hover:bg-cat-overlay2 transition-colors">
+                  <Mail size={18} />
+                  Email Me
+                </a>
+                <a href={`tel:${RESUME_DATA.header.contact.phone}`} className="flex items-center gap-2 px-6 py-3 border border-cat-surface1 text-cat-text rounded-lg hover:bg-cat-base transition-colors">
+                  <Phone size={18} />
+                  Call Me
+                </a>
+              </div>
+
+              <div className="flex justify-center gap-6 text-cat-subtext1 mb-8">
+                 {/* Placeholder social links */}
+                 <a href="#" className="hover:text-cat-blue transition-colors"><Linkedin size={24} /></a>
+                 <a href="#" className="hover:text-cat-mauve transition-colors"><Github size={24} /></a>
+              </div>
+
+              <p className="text-cat-overlay1 text-sm">
+                © {new Date().getFullYear()} {RESUME_DATA.header.name}. Built with React & Tailwind.
+              </p>
+            </div>
+          </footer>
+        );
+      };
+
+      const App = () => {
+        return (
+          <div className="font-sans antialiased text-cat-text bg-cat-base selection:bg-cat-rosewater selection:text-white">
+            <Navigation />
+            <Hero />
+            <Experience />
+            <Skills />
+            <Education />
+            <Footer />
+          </div>
+        );
+      };
+
+      const root = createRoot(document.getElementById('root'));
+      root.render(<App />);
+    </script>
   </body>
 </html>
